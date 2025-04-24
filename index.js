@@ -1,27 +1,38 @@
-const express = require('express')
-const cors = require ('cors')
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser');
-const employeeRoute =require('./route/employeeRoute')
-require('dotenv').config()
- 
-const app = express()
-app.use(cors({
-    origin: process.env.CLIENT_URL,
-    methods: ['GET', 'POST','PUT', 'DELETE']
-}))
+const connection = require("./database/database");
 
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
+const userRoute = require("./route/userRoute");
+const productRoute = require("./route/productRoute")
+
+require('dotenv').config();
+app.use(express.json());
 app.get(bodyParser.json({
-    limit : "50mb"
+    limit: "50mb"
 }))
 
-app.use(bodyParser.urlencoded({ extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/employee', employeeRoute )
+app.get('/', (req, res) => {
+    res.send('Hello, Express!');
+});
 
-const PORT = process.env.PORT ||8888
+app.use("/api/user", userRoute);
+app.use("/api/product", productRoute);
 
-const listener = app.listen(PORT, () =>{
-    console.log('Server is running on the port' + listener.address().port);
+const PORT = process.env.PORT || 3000;
+
+(async () => {
+    try {
+        // using mongoose
+        await connection();
+
+        // Lắng nghe cổng
+        app.listen(PORT, () => {
+            console.log(`Server đang chạy tại http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.log("Error connect to database", error);
+    }
 })
