@@ -32,21 +32,20 @@ const getAllProductController = async (req, res) => {
             products
         })
     } catch (error) {
-        console.log("Error from server", error);
         res.status(500).json({ message: "Error from server!" })
     }
 }
 
 const getProductByIDController = async (req, res) => {
-    const _id = req.params.id;
+    const id = req.params.id;
     try {
-        const product = await Products.findByID({ _id });
-        console.log("product by id: ", user);
+        const product = await Products.findOne({_id: id });
+        
         res.status(200).json({
-            message: " Da thanh cong"
+            message: " Da thanh cong",
+            product
         })
     } catch (error) {
-        console.log("Error from server, error");
         res.status(500).json({ message: "Error from server!" })
     }
 }

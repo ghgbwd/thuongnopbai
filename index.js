@@ -20,8 +20,7 @@ app.get('/', (req, res) => {
 
 app.use("/api/user", userRoute);
 app.use("/api/product", productRoute);
-
-const PORT = process.env.PORT || 3000;
+const PORT = 8080;
 
 (async () => {
     try {
@@ -35,4 +34,4 @@ const PORT = process.env.PORT || 3000;
     } catch (error) {
         console.log("Error connect to database", error);
     }
-})
+})()
